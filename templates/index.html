@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Performance Prediction</title>
+  <style>
+    body {font-family: Arial, sans-serif; background: linear-gradient(135deg,#c8e6f3,#f3f7fc); margin:0; padding:0;}
+    header {background-color: #0066cc; color:white; text-align:center; padding:20px 0;}
+    header h1 { margin:0; }
+    nav{text-align:center; margin-top:10px;}
+    nav a{color:white; margin:0 15px; text-decoration:none; font-weight:bold;}
+    nav a:hover{text-decoration:underline;}
+    .section{width:80%; max-width:700px; margin:30px auto; background:white; padding:25px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+    .section h2{text-align:center; color:#0066cc;}
+    .section p{color:#333; font-size:16px; line-height:1.6;}
+    .section ul{color:#333; margin-left:20px;}
+    .form-container{width:80%; max-width:600px; background:white; margin:30px auto; padding:25px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+    .form-container h2{text-align:center; color:#0066cc;}
+    label{font-weight:bold; display:block; margin-top:15px;}
+    input{width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:8px;}
+    button{background:#007bff; color:white; padding:10px 15px; border:none; border-radius:10px; cursor:pointer; margin-top:20px; width:100%; font-size:16px;}
+    button:hover{background:#0056b3;}
+    .result{margin-top:20px; text-align:center; font-weight:bold; color:#333; font-size:18px;}
+    footer{text-align:center; padding:15px 0; background:#004080; color:white; margin-top:40px;}
+  </style>
+</head>
+<body>
+<header>
+  <h1>📊 Student Performance Prediction</h1>
+  <nav><a href="#welcome">Welcome</a><a href="#about">About</a><a href="#predict">Predict</a></nav>
+</header>
+
+<div class="section" id="welcome">
+  <h2>Welcome!</h2>
+  <p>Welcome to the Student Performance Predictor! This tool estimates students’ final exam scores based on study hours, attendance, and previous exam marks. Explore the interactive form below to see predicted performance in real time.</p>
+</div>
+
+<div class="section" id="about">
+  <h2>About This Project</h2>
+  <p>The objective of this project is to predict student academic performance using key data points. Using statistical analysis and a machine learning model, it calculates estimated final marks.</p>
+  <p>Technologies used:</p>
+  <ul>
+    <li>Frontend: HTML5, CSS3, JavaScript</li>
+    <li>Backend: Python (Flask)</li>
+    <li>Libraries: pandas, numpy, scikit-learn</li>
+  </ul>
+</div>
+
+<div class="form-container" id="predict">
+  <h2>Predict Student Marks</h2>
+  <label>Study Hours per Day:</label><input type="number" id="study" placeholder="Enter study hours">
+  <label>Attendance Percentage:</label><input type="number" id="attendance" placeholder="Enter attendance %">
+  <label>Previous Exam Score:</label><input type="number" id="previous" placeholder="Enter previous marks %">
+  <button onclick="predict()">Predict Performance</button>
+  <div class="result" id="result"></div>
+</div>
+
+<footer><p> Developed by Siddhant Dongre | Full Stack ML Project </p></footer>
+
+<script>
+function predict(){
+  const study = document.getElementById('study').value;
+  const attendance = document.getElementById('attendance').value;
+  const previous = document.getElementById('previous').value;
+  if(!study || !attendance || !previous){alert('Please fill all fields'); return;}
+  fetch('/api/predict', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({study:study, attendance:attendance, previous:previous})})
+  .then(response=>response.json()).then(data=>{document.getElementById('result').innerText=`Predicted Marks: ${data.predicted_marks}%`;}).catch(error=>console.error('Error:',error));
+}
+</script>
+</body>
+</html>
